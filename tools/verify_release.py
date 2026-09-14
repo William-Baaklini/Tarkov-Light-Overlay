@@ -16,6 +16,9 @@ with zipfile.ZipFile(archive) as package:
                  'Microsoft.Web.WebView2.WinForms.dll', 'data/icons.idx',
                  'tiles/maps.json', 'README.md', 'THIRD-PARTY-NOTICES.md'):
         assert prefix + name in names, f'Missing runtime asset: {name}'
+    for name in ('dotnet-LICENSE.txt', 'dotnet-THIRD-PARTY-NOTICES.txt',
+                 'windowsdesktop-LICENSE.txt', 'webview2-LICENSE.txt', 'webview2-NOTICE.txt'):
+        assert prefix + 'licenses/' + name in names, f'Missing dependency license: {name}'
     exe = package.read(prefix + 'TLO.exe')
     pe = struct.unpack_from('<I', exe, 0x3c)[0]
     assert exe[:2] == b'MZ' and exe[pe:pe+4] == b'PE\0\0'

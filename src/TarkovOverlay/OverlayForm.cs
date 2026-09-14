@@ -129,6 +129,22 @@ public sealed class OverlayForm : Form
             Native.SendMessage(Handle, Native.WM_NCLBUTTONDOWN, new IntPtr(Native.HTCAPTION), IntPtr.Zero);
         };
 
+        var brand = new Panel { Dock = DockStyle.Left, Width = 40, AccessibleName = "TLO" };
+        brand.Paint += (_, e) =>
+        {
+            int size = Math.Min(24 * DeviceDpi / 96, Math.Min(brand.Width, brand.Height) - 8);
+            e.Graphics.DrawIcon(AppIcon.Load(), new Rectangle((brand.Width - size) / 2,
+                (brand.Height - size) / 2, size, size));
+        };
+        brand.MouseDown += (_, e) =>
+        {
+            if (e.Button != MouseButtons.Left || _secondMonitor.IsActive) return;
+            Native.ReleaseCapture();
+            Native.SendMessage(Handle, Native.WM_NCLBUTTONDOWN, new IntPtr(Native.HTCAPTION), IntPtr.Zero);
+        };
+        new ToolTip().SetToolTip(brand, "TLO — Tarkov Light Overlay");
+        _titleBar.Controls.Add(brand);
+
         foreach (var (key, label) in new[]
                  { ("dev", "Tarkov.dev"), ("wiki", "Wiki"), ("ammo", "Ammo"), ("maps", "Maps") })
         {

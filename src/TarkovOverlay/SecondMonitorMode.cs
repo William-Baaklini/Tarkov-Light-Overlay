@@ -2,10 +2,28 @@ namespace TarkovOverlay;
 
 internal sealed record DisplayInfo(string Name, Rectangle Bounds, Rectangle WorkingArea, bool Primary);
 
+internal interface IPlacementWindow
+{
+    Rectangle Bounds { get; set; }
+    Rectangle RestoreBounds { get; }
+    FormWindowState WindowState { get; set; }
+    Padding Padding { get; set; }
+    Size MinimumSize { get; set; }
+}
+
+internal sealed class FormPlacementWindow(Form form) : IPlacementWindow
+{
+    public Rectangle Bounds { get => form.Bounds; set => form.Bounds = value; }
+    public Rectangle RestoreBounds => form.RestoreBounds;
+    public FormWindowState WindowState { get => form.WindowState; set => form.WindowState = value; }
+    public Padding Padding { get => form.Padding; set => form.Padding = value; }
+    public Size MinimumSize { get => form.MinimumSize; set => form.MinimumSize = value; }
+}
+
 /// <summary>Keeps fullscreen placement separate from the user's normal window geometry.</summary>
 internal sealed class SecondMonitorMode
 {
-    private readonly Form _window;
+    private readonly IPlacementWindow _window;
     private readonly Func<DisplayInfo[]> _displays;
     private Rectangle? _savedBounds;
     private FormWindowState _savedState;
@@ -18,6 +36,9 @@ internal sealed class SecondMonitorMode
     public Rectangle? SavedBounds => _savedBounds;
 
     public SecondMonitorMode(Form window, Func<DisplayInfo[]>? displays = null)
+        : this(new FormPlacementWindow(window), displays) { }
+
+    internal SecondMonitorMode(IPlacementWindow window, Func<DisplayInfo[]>? displays = null)
     {
         _window = window;
         _displays = displays ?? (() => Screen.AllScreens.Select(s =>

@@ -4,7 +4,7 @@ on:
     inputs:
       version:
         description: Package version (major.minor.patch)
-        default: '1.0.0'
+        default: '1.0.1'
         required: true
   push:
     tags: ['v*']

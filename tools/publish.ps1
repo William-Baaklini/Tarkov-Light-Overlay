@@ -1,6 +1,6 @@
 param(
     [ValidatePattern('^\d+\.\d+\.\d+$')]
-    [string]$Version = '1.0.0'
+    [string]$Version = '1.0.1'
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
@@ -16,11 +16,11 @@ foreach ($asset in @('tiles/maps.json', 'data/icons.idx')) {
 $stage = Join-Path $projectRoot ('artifacts/package-' + [guid]::NewGuid().ToString('N'))
 $package = Join-Path $stage $packageName
 New-Item -ItemType Directory -Path $package -Force | Out-Null
-& dotnet publish (Join-Path $projectRoot 'src/TarkovOverlay/TarkovOverlay.csproj') -c Release -r win-x64 --self-contained true --artifacts-path (Join-Path $projectRoot 'artifacts/dotnet') -o $package "-p:Version=$Version" --nologo
+& dotnet publish (Join-Path $projectRoot 'src/TarkovOverlay/TarkovOverlay.csproj') -c Release -r win-x64 --self-contained true --artifacts-path (Join-Path $projectRoot 'artifacts/dotnet') -o $package "-p:Version=$Version" -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -p:EnableCompressionInSingleFile=true -p:PublishTrimmed=false -p:PublishReferencesDocumentationFiles=false --nologo
 if ($LASTEXITCODE -ne 0) { throw 'dotnet publish failed.' }
 # Runtime publishing does not automatically copy the NuGet packages' licenses.
 $assets = Get-Content -LiteralPath (Join-Path $projectRoot 'artifacts/dotnet/obj/TarkovOverlay/project.assets.json') -Raw | ConvertFrom-Json
-$runtime = Get-Content -LiteralPath (Join-Path $package 'TLO.runtimeconfig.json') -Raw | ConvertFrom-Json
+$runtime = Get-Content -LiteralPath (Join-Path $projectRoot 'artifacts/dotnet/bin/TarkovOverlay/release_win-x64/TLO.runtimeconfig.json') -Raw | ConvertFrom-Json
 $coreVersion = ($runtime.runtimeOptions.includedFrameworks | Where-Object name -eq 'Microsoft.NETCore.App').version
 $desktopVersion = ($runtime.runtimeOptions.includedFrameworks | Where-Object name -eq 'Microsoft.WindowsDesktop.App').version
 $webViewPath = ($assets.libraries.PSObject.Properties | Where-Object Name -Like 'Microsoft.Web.WebView2/*').Value.path

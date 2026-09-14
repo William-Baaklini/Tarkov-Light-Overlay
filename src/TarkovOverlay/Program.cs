@@ -5,8 +5,14 @@ namespace TarkovOverlay;
 internal static class Program
 {
     [STAThread]
-    private static void Main()
+    private static void Main(string[] args)
     {
+        if (args.Length == 2 && args[0] == "--verify-install")
+        {
+            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
+            InstallVerification.Run(args[1]);
+            return;
+        }
         // A second copy would fight the first one for the global hotkeys.
         using var single = new Mutex(true, "TarkovLightOverlay.SingleInstance", out bool isFirst);
         if (!isFirst) return;

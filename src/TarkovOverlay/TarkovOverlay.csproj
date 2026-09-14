@@ -11,7 +11,7 @@
     <RootNamespace>TarkovOverlay</RootNamespace>
     <Product>TLO — Tarkov Light Overlay</Product>
     <Description>Desktop maps, reference tabs, and item lookup for Escape from Tarkov.</Description>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <Platforms>x64</Platforms>

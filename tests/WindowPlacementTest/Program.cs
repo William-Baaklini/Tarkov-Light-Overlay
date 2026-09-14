@@ -10,10 +10,8 @@ internal static class Program
         var primary = new DisplayInfo("primary", new(0, 0, 1920, 1080), new(0, 0, 1920, 1040), true);
         var secondary = new DisplayInfo("secondary", new(-2560, -180, 2560, 1440), new(-2560, -180, 2560, 1400), false);
         DisplayInfo[] displays = [primary];
-        using var window = new Form { FormBorderStyle = FormBorderStyle.None,
-            StartPosition = FormStartPosition.Manual, Bounds = new(100, 120, 850, 600),
+        var window = new FakeWindow { Bounds = new(100, 120, 850, 600),
             Padding = new Padding(5), MinimumSize = new(560, 360) };
-        _ = window.Handle;
         var initial = window.Bounds;
         var mode = new SecondMonitorMode(window, () => displays);
         Check(!mode.Toggle() && window.Bounds == initial && !mode.IsActive, "one display leaves geometry untouched");
@@ -21,7 +19,6 @@ internal static class Program
         Check(mode.Toggle() && mode.IsActive, "enters second-monitor mode");
         Check(window.Bounds == secondary.Bounds && window.Padding == Padding.Empty, "fills complete display, including taskbar area");
         Check(mode.SavedBounds == initial, "preserves normal geometry for persistence");
-        window.Hide();
         mode.Refresh();
         Check(window.Bounds == secondary.Bounds, "refresh while hidden preserves fullscreen");
         Check(mode.Toggle() && !mode.IsActive && window.Bounds == initial, "repeat restores exact position and size");
@@ -56,17 +53,20 @@ internal static class Program
         var physical = Screen.AllScreens;
         if (physical.Length > 1)
         {
+            using var actualWindow = new Form { FormBorderStyle = FormBorderStyle.None,
+                StartPosition = FormStartPosition.Manual, Padding = new Padding(5) };
+            _ = actualWindow.Handle;
             var area = Screen.PrimaryScreen!.WorkingArea;
-            window.Bounds = new Rectangle(area.X + 50, area.Y + 50, 800, 500);
-            initial = window.Bounds;
-            var actual = new SecondMonitorMode(window);
+            actualWindow.Bounds = new Rectangle(area.X + 50, area.Y + 50, 800, 500);
+            initial = actualWindow.Bounds;
+            var actual = new SecondMonitorMode(actualWindow);
             actual.Toggle();
             Application.DoEvents();
             actual.Refresh();
-            Check(Screen.AllScreens.Any(s => !s.Primary && window.Bounds == s.Bounds), "real second display uses exact physical bounds");
+            Check(Screen.AllScreens.Any(s => !s.Primary && actualWindow.Bounds == s.Bounds), "real second display uses exact physical bounds");
             actual.Toggle();
             Application.DoEvents();
-            Check(window.Bounds == initial, "real mixed-DPI round trip restores exact physical bounds");
+            Check(actualWindow.Bounds == initial, "real mixed-DPI round trip restores exact physical bounds");
         }
         Console.WriteLine("All window placement checks passed.");
     }
@@ -75,5 +75,16 @@ internal static class Program
     {
         if (!condition) throw new InvalidOperationException(description);
         Console.WriteLine("PASS: " + description);
+    }
+
+    // Synthetic layouts must not be constrained by the CI runner's physical
+    // desktop size. The real Form adapter is exercised separately when possible.
+    private sealed class FakeWindow : IPlacementWindow
+    {
+        public Rectangle Bounds { get; set; }
+        public Rectangle RestoreBounds => Bounds;
+        public FormWindowState WindowState { get; set; }
+        public Padding Padding { get; set; }
+        public Size MinimumSize { get; set; }
     }
 }

@@ -19,13 +19,15 @@ what it sells for, without ever touching the game process.
 
 1. Download **TLO-win-x64.zip** from the link above or from Releases.
 2. Extract the **entire ZIP** into a folder of your choice.
-3. Run **TLO.exe** inside that folder. Keep its companion files, `tiles`, and
-   `data` alongside it. No installer or separate .NET installation is needed.
+3. Run **TLO.exe** inside that folder. Keep `tiles` and `data` alongside it.
+   No installer or separate .NET installation is needed. The runtime libraries
+   are bundled inside the executable, so there are no loose DLLs to manage.
 4. Use **Ctrl + Shift + T** to show or hide the overlay.
 
 TLO opens on first launch; later launches start hidden in the system tray.
 The executable, window, and tray use the bundled gold TLO emblem. This community
 build is unsigned; the icon is branding, not a code-signing certificate.
+The emblem also appears in the title bar, to the left of Tarkov.dev.
 
 | Action | Default |
 | --- | --- |
@@ -340,10 +342,18 @@ dotnet run --project tests/WindowPlacementTest -c Release
 ```
 
 Create the portable download with `publish.bat` (or
-`powershell -File tools/publish.ps1 -Version 1.0.0`). This publishes a Windows x64
+`powershell -File tools/publish.ps1 -Version 1.0.1`). This publishes a Windows x64
 [self-contained build](https://learn.microsoft.com/dotnet/core/deploying/), copies
 all map tiles and scanner data, and creates `release/TLO-win-x64.zip` plus its
-SHA-256 checksum. An existing ZIP is never overwritten; move it first to rebuild.
+SHA-256 checksum. The ready-to-run folder is at `release/TLO-win-x64/`.
+Existing downloads and published folders are never overwritten; move them first
+to rebuild. Native runtime components are extracted by .NET into its temporary
+cache on first launch; the download folder stays tidy.
+
+For a noninteractive installation check that leaves your settings untouched, run
+`TLO.exe --verify-install C:\path\to\report.json`. It verifies WinForms, maps,
+the scanner index, icon loading, and the installed WebView2 Runtime. The report's
+parent folder must already exist.
 
 ## GitHub releases and website
 

@@ -71,10 +71,19 @@ that state too.
 
 - Change the combination in **Settings → Shortcuts → Second monitor / restore**,
   just like the overlay, tab, and scanner shortcuts.
-- From the primary monitor, TLO prefers a secondary display. If TLO is already
-  on a secondary display, it uses another display. With more than two displays,
-  it prefers another non-primary display, then sorts by Windows display name.
-- With only one display, it shows a tray notice and leaves the window unchanged.
+- Choose the destination under **Settings → Fullscreen monitor**. The default,
+  **Automatic — non-primary monitor**, chooses a non-main display even if the
+  normal window is already on that display. With multiple non-main displays,
+  automatic mode sorts by Windows display device name.
+- Select a specific display to always use it. The list includes resolutions and
+  marks the main display. Your choice is saved across restarts; you can select
+  the main display too, including when it is the only connected monitor.
+- If a selected display is disconnected, it remains listed as disconnected.
+  The shortcut shows a notice and leaves the window unchanged until you reconnect
+  it or choose another display. Automatic mode similarly leaves the window alone
+  when there is no non-main display.
+- A changed preference applies the next time you enter fullscreen. If already
+  fullscreen, the next shortcut press still restores your previous window first.
 - Hiding and reopening keeps the current fullscreen mode for this session.
   Your normal window bounds remain saved for the next launch.
 - If a monitor is disconnected or the desktop becomes smaller, the restored
@@ -309,6 +318,7 @@ To see exactly what is being requested and blocked, set
 | Setting | Notes |
 | --- | --- |
 | Shortcuts | Overlay toggle, second monitor / restore, and one per tab. Click a field, press the combo, `Backspace` clears |
+| Fullscreen monitor | Automatic non-primary display, or a specific saved display; resolutions and main-display status are shown |
 | Opacity | 30–100%, previews live as you drag |
 | Unload web pages when hidden | Lowest RAM. Off = instant reopen, ~60–120 MB idle |
 | Block ads and trackers / strictly | See above |
@@ -342,12 +352,14 @@ dotnet run --project tests/WindowPlacementTest -c Release
 ```
 
 Create the portable download with `publish.bat` (or
-`powershell -File tools/publish.ps1 -Version 1.0.1`). This publishes a Windows x64
+`powershell -File tools/publish.ps1 -Version 1.0.2`). This publishes a Windows x64
 [self-contained build](https://learn.microsoft.com/dotnet/core/deploying/), copies
 all map tiles and scanner data, and creates `release/TLO-win-x64.zip` plus its
 SHA-256 checksum. The ready-to-run folder is at `release/TLO-win-x64/`.
 Existing downloads and published folders are never overwritten; move them first
-to rebuild. Native runtime components are extracted by .NET into its temporary
+to rebuild, or pass `-OutputDirectory release/v1.0.2` to build beside a running
+copy. To verify that output, run `python tools/verify_release.py release/v1.0.2`.
+Native runtime components are extracted by .NET into its temporary
 cache on first launch; the download folder stays tidy.
 
 For a noninteractive installation check that leaves your settings untouched, run

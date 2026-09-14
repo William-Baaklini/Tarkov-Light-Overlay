@@ -4,7 +4,7 @@ on:
     inputs:
       version:
         description: Package version (major.minor.patch)
-        default: '1.0.1'
+        default: '1.0.2'
         required: true
   push:
     tags: ['v*']
@@ -39,7 +39,9 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: TLO-win-x64
-          path: release/*
+          path: |
+            release/TLO-win-x64.zip
+            release/TLO-win-x64.sha256
       - name: Create draft release
         if: startsWith(github.ref, 'refs/tags/')
         env:

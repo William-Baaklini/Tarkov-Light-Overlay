@@ -45,14 +45,17 @@ internal sealed class SecondMonitorMode
             new DisplayInfo(s.DeviceName, s.Bounds, s.WorkingArea, s.Primary)).ToArray());
     }
 
-    public bool Toggle()
+    public bool Toggle(string? preferredDisplay = null)
     {
         if (IsActive) { Restore(); return true; }
         var displays = _displays();
-        if (displays.Length < 2) return false;
-        var current = Nearest(_window.Bounds, displays);
-        var target = displays.Where(s => s.Name != current.Name)
-            .OrderBy(s => s.Primary).ThenBy(s => s.Name, StringComparer.Ordinal).First();
+        // A chosen display may also be the current or primary monitor. Automatic
+        // always prefers a non-primary monitor, regardless of the window's location.
+        var target = string.IsNullOrEmpty(preferredDisplay)
+            ? displays.Where(s => !s.Primary).OrderBy(s => s.Name, StringComparer.Ordinal).FirstOrDefault()
+            : displays.FirstOrDefault(s => string.Equals(s.Name, preferredDisplay, StringComparison.OrdinalIgnoreCase));
+        // Keep a disconnected explicit preference; never silently use a different screen.
+        if (target is null) return false;
 
         _savedBounds = _window.WindowState == FormWindowState.Normal
             ? _window.Bounds : _window.RestoreBounds;

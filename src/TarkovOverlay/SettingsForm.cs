@@ -6,6 +6,7 @@ public sealed class SettingsForm : Form
 
     private readonly HotkeyBox _toggle = new();
     private readonly HotkeyBox _secondMonitor = new();
+    private readonly ComboBox _monitorTarget = new();
     private readonly HotkeyBox _dev = new();
     private readonly HotkeyBox _wiki = new();
     private readonly HotkeyBox _ammo = new();
@@ -55,6 +56,28 @@ public sealed class SettingsForm : Form
                    + "Backspace clears · Esc cancels · Ctrl/Alt/Shift/Win, or an F-key.";
         Controls.Add(_hint);
         y += 42;
+
+        AddSection("Fullscreen monitor", ref y);
+        _monitorTarget.SetBounds(16, y, 398, 28);
+        _monitorTarget.DropDownStyle = ComboBoxStyle.DropDownList;
+        _monitorTarget.BackColor = Theme.Input;
+        _monitorTarget.ForeColor = Theme.Text;
+        _monitorTarget.FlatStyle = FlatStyle.Flat;
+        _monitorTarget.AccessibleName = "Fullscreen monitor";
+        _monitorTarget.DropDownWidth = 440;
+        LoadMonitors(cfg.SecondMonitorDeviceName);
+        _monitorTarget.DropDown += (_, _) => LoadMonitors(
+            (_monitorTarget.SelectedItem as MonitorChoice)?.DeviceName ?? "");
+        Controls.Add(_monitorTarget);
+        y += 34;
+        var monitorHint = new Label
+        {
+            Text = "Used next time you enter fullscreen. Press the shortcut again\r\nto restore your previous window position and size.",
+            ForeColor = Theme.Muted,
+        };
+        monitorHint.SetBounds(16, y, 398, 36);
+        Controls.Add(monitorHint);
+        y += 44;
 
         AddSection("Appearance", ref y);
 
@@ -211,6 +234,38 @@ public sealed class SettingsForm : Form
     /// <summary>Fires as the slider moves so the overlay updates live behind the dialog.</summary>
     public event Action<double>? OpacityPreview;
 
+    private sealed record MonitorChoice(string DeviceName, string Label)
+    {
+        public override string ToString() => Label;
+    }
+
+    private void LoadMonitors(string? selected)
+    {
+        selected ??= "";
+        _monitorTarget.BeginUpdate();
+        try
+        {
+            _monitorTarget.Items.Clear();
+            _monitorTarget.Items.Add(new MonitorChoice("", "Automatic — non-primary monitor"));
+            foreach (var screen in Screen.AllScreens.OrderBy(s => s.DeviceName, StringComparer.Ordinal))
+            {
+                var name = screen.DeviceName.Replace(@"\\.\DISPLAY", "Display ");
+                var label = $"{name} — {screen.Bounds.Width} × {screen.Bounds.Height}" +
+                    (screen.Primary ? " (main)" : "");
+                _monitorTarget.Items.Add(new MonitorChoice(screen.DeviceName, label));
+            }
+            var choice = _monitorTarget.Items.Cast<MonitorChoice>().FirstOrDefault(c =>
+                string.Equals(c.DeviceName, selected, StringComparison.OrdinalIgnoreCase));
+            if (choice is null)
+            {
+                choice = new MonitorChoice(selected, selected.Replace(@"\\.\DISPLAY", "Display ") + " (disconnected)");
+                _monitorTarget.Items.Add(choice);
+            }
+            _monitorTarget.SelectedItem = choice;
+        }
+        finally { _monitorTarget.EndUpdate(); }
+    }
+
     private void AddSection(string title, ref int y)
     {
         var l = new Label
@@ -240,6 +295,7 @@ public sealed class SettingsForm : Form
     {
         _cfg.ToggleOverlay = _toggle.Value;
         _cfg.ToggleSecondMonitor = _secondMonitor.Value;
+        _cfg.SecondMonitorDeviceName = (_monitorTarget.SelectedItem as MonitorChoice)?.DeviceName ?? "";
         _cfg.OpenTarkovDev = _dev.Value;
         _cfg.OpenWiki = _wiki.Value;
         _cfg.OpenAmmo = _ammo.Value;

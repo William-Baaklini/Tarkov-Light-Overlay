@@ -536,10 +536,13 @@ public sealed class OverlayForm : Form
 
     public void ToggleSecondMonitor()
     {
-        if (!_secondMonitor.Toggle())
+        if (!_secondMonitor.Toggle(_cfg.SecondMonitorDeviceName))
         {
-            _tray.ShowBalloonTip(3500, "Second monitor unavailable",
-                "Connect another display and extend your desktop to use this shortcut.", ToolTipIcon.Info);
+            _tray.ShowBalloonTip(3500, "Fullscreen monitor unavailable",
+                string.IsNullOrEmpty(_cfg.SecondMonitorDeviceName)
+                    ? "Connect a non-primary display, or choose a fullscreen monitor in TLO Settings."
+                    : "Your selected monitor is disconnected. Reconnect it or choose another fullscreen monitor in TLO Settings.",
+                ToolTipIcon.Info);
             return;
         }
         UpdateMonitorControls();

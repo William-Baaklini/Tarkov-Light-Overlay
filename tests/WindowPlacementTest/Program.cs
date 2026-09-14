@@ -31,7 +31,7 @@ internal static class Program
         window.Bounds = new Rectangle(-2200, 60, 900, 640);
         initial = window.Bounds;
         mode.Toggle();
-        Check(window.Bounds == primary.Bounds, "starting on secondary moves to the other display");
+        Check(window.Bounds == secondary.Bounds, "automatic mode stays on a non-primary display even when already there");
         mode.Toggle();
         Check(window.Bounds == initial, "negative-coordinate original position restores");
         mode.Toggle();
@@ -47,6 +47,31 @@ internal static class Program
         mode.Toggle();
         Check(window.WindowState == FormWindowState.Maximized, "restores prior maximized state");
         window.WindowState = FormWindowState.Normal;
+
+        var third = new DisplayInfo("third", new(1920, 0, 1920, 1200), new(1920, 0, 1920, 1160), false);
+        displays = [third, secondary, primary];
+        window.Bounds = new Rectangle(100, 120, 850, 600);
+        initial = window.Bounds;
+        Check(mode.Toggle("third") && window.Bounds == third.Bounds, "explicit choice selects the requested display on a three-monitor desktop");
+        Check(mode.Toggle("primary") && window.Bounds == initial, "changing the preference while fullscreen still restores the original window first");
+        Check(mode.Toggle("primary") && window.Bounds == primary.Bounds, "explicit choice can fill the main/current display");
+        mode.Toggle();
+        Check(window.Bounds == initial, "main-display fullscreen restores exact geometry");
+        Check(!mode.Toggle("disconnected") && !mode.IsActive && window.Bounds == initial,
+            "missing selected monitor does not move the window or enter fullscreen");
+        displays = [primary];
+        Check(mode.Toggle("primary") && window.Bounds == primary.Bounds, "explicit choice also works with one attached display");
+        mode.Toggle();
+        Check(!mode.Toggle() && window.Bounds == initial, "automatic mode needs a non-primary display");
+        displays = [third, primary, secondary];
+        mode.Toggle();
+        Check(window.Bounds == secondary.Bounds, "automatic choice is independent of display enumeration order");
+        mode.Toggle();
+        mode.Toggle("THIRD");
+        Check(window.Bounds == third.Bounds, "saved display names match without case sensitivity");
+        displays = [primary, secondary];
+        mode.Refresh();
+        Check(!mode.IsActive && window.Bounds == initial, "disconnecting the explicitly selected display restores original geometry");
 
         // Use the real display geometry/DPI too, without opening the production app
         // or reading/writing its configuration, notes, hotkeys, or scanner state.

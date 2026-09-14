@@ -5,6 +5,7 @@ import pathlib
 import struct
 import zipfile
 import zlib
+import sys
 
 
 def bundle_entries(exe):
@@ -43,7 +44,8 @@ def bundle_entries(exe):
     return entries
 
 root = pathlib.Path(__file__).resolve().parent.parent
-archive = root / 'release' / 'TLO-win-x64.zip'
+release_dir = pathlib.Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else root / 'release'
+archive = release_dir / 'TLO-win-x64.zip'
 prefix = 'TLO-win-x64/'
 with zipfile.ZipFile(archive) as package:
     assert package.testzip() is None, 'ZIP CRC failure'

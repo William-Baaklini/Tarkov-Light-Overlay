@@ -1,10 +1,11 @@
 param(
     [ValidatePattern('^\d+\.\d+\.\d+$')]
-    [string]$Version = '1.0.1'
+    [string]$Version = '1.0.2',
+    [string]$OutputDirectory = 'release'
 )
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path -Parent $PSScriptRoot
-$releaseRoot = Join-Path $projectRoot 'release'
+$releaseRoot = [IO.Path]::GetFullPath((Join-Path $projectRoot $OutputDirectory))
 $packageName = 'TLO-win-x64'
 $archive = Join-Path $releaseRoot "$packageName.zip"
 $readyFolder = Join-Path $releaseRoot $packageName

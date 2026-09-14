@@ -73,6 +73,8 @@ public sealed class Config
 {
     public Hotkey ToggleOverlay { get; set; } = new() { Ctrl = true, Shift = true, Key = (int)Keys.T };
     public Hotkey ToggleSecondMonitor { get; set; } = new() { Ctrl = true, Shift = true, Key = (int)Keys.M };
+    /// <summary>Windows display device name; empty chooses a non-primary display automatically.</summary>
+    public string SecondMonitorDeviceName { get; set; } = "";
     public Hotkey OpenTarkovDev { get; set; } = new();
     public Hotkey OpenWiki { get; set; } = new();
     public Hotkey OpenAmmo { get; set; } = new();

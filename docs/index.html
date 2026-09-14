@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#171a1b">
+  <meta name="description" content="TLO puts Tarkov maps, item prices and reference tabs one shortcut away. Download the portable Windows overlay and take your map to a second monitor.">
+  <title>TLO — Your raid. Within reach.</title>
+  <link rel="icon" href="assets/app.ico" sizes="any">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="masthead wrap">
+    <a class="brand" href="./" aria-label="TLO home"><img src="assets/app.ico" width="42" height="42" alt=""><span>TLO</span><span class="brand-name">Tarkov Light Overlay</span></a>
+    <nav aria-label="Main navigation"><a href="#field-kit">The field kit</a><a href="https://github.com/William-Baaklini/Tarkov-Light-Overlay">Source code <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <main id="main">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="platform">A desktop companion for Escape from Tarkov</p>
+        <h1 id="hero-title">Your raid.<br>Within reach.</h1>
+        <p class="intro">The map. The ammo chart. That item's price.<br class="desktop-break"> Keep what you need one shortcut away.</p>
+        <a class="download" href="https://github.com/William-Baaklini/Tarkov-Light-Overlay/releases/latest/download/TLO-win-x64.zip"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"/></svg>Download TLO for Windows</a>
+        <p class="download-note">Windows 10 / 11 · x64 · Portable ZIP</p>
+        <a class="text-link" href="https://github.com/William-Baaklini/Tarkov-Light-Overlay/releases/latest">Release notes &amp; checksum</a>
+      </div>
+      <div class="hero-visual">
+        <div class="oversize-brand" aria-hidden="true">TLO</div>
+        <figure class="map-window">
+          <div class="preview-title"><span><img src="assets/app.ico" width="20" height="20" alt="">TLO</span><span>Map view preview</span></div>
+          <div class="preview-tabs" aria-hidden="true"><span>Tarkov.dev</span><span>Wiki</span><span>Ammo</span><span class="chosen">Maps</span></div>
+          <div class="map-canvas"><img src="assets/ground-zero.png" width="2656" height="2160" alt="Ground Zero reference map, showing streets, buildings and extraction locations" fetchpriority="high"></div>
+          <figcaption><span>Ground Zero</span><span>Pan · Zoom · Draw · Take notes</span></figcaption>
+        </figure>
+        <div class="shortcut-tag"><span>Call it up. Drop back in.</span><span class="key-combo"><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>T</kbd></span></div>
+      </div>
+    </section>
+    <div class="principles wrap"><p>Reference tabs on demand</p><p>Browsers unload when hidden</p><p>Maps &amp; notes stored locally</p></div>
+    <section id="field-kit" class="field-kit wrap" aria-labelledby="kit-title">
+      <div class="section-intro"><h2 id="kit-title">Less searching.<br>More situational awareness.</h2><p>A small field kit for the moments between decisions. Bring it up over a borderless or windowed game, then hide it with the same shortcut.</p></div>
+      <div class="feature-list">
+        <article><div class="feature-symbol" aria-hidden="true">⌖</div><div><h3>Make the map yours.</h3><p>Zoom into the route, draw a line, pin a note. Your map position and annotations are there when you come back.</p></div></article>
+        <article><div class="feature-symbol price-symbol" aria-hidden="true">₽</div><div><h3>Know what you're holding.</h3><p>Hover an inventory item and press <kbd>Alt</kbd> + <kbd>F</kbd> for a price card. Press again to open it on tarkov.dev.</p><p class="detail">Screen-based scanner: designed for 1080p at 100% scale. Items sharing an image can be ambiguous.</p></div></article>
+        <article><div class="feature-symbol" aria-hidden="true">≡</div><div><h3>Keep your references close.</h3><p>Tarkov.dev, the Wiki and eft-ammo in one window. Choose a tab and start looking up the next item, quest or round.</p></div></article>
+      </div>
+    </section>
+    <section class="monitor-section" aria-labelledby="monitor-title"><div class="wrap monitor-layout">
+      <div class="display-diagram" role="img" aria-label="TLO expands onto a second monitor, then returns to its original window size and position">
+        <div class="display-main"><span>Your game</span><div class="little-overlay">TLO</div></div>
+        <span class="display-transfer" aria-hidden="true">⇄</span>
+        <div class="display-second"><img src="assets/app.ico" width="44" height="44" alt=""><span>TLO</span></div>
+        <span class="diagram-caption">One shortcut. There and back.</span>
+      </div>
+      <div><h2 id="monitor-title">Give your map<br>its own screen.</h2><p>Got a second monitor? Fill it with TLO in borderless fullscreen. Press the same shortcut again and your window returns to its previous position and size.</p><p class="monitor-shortcut"><kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>M</kbd></p><p class="detail">Change it in Settings → Shortcuts → Second monitor / restore. The title-bar button does the same thing.</p></div>
+    </div></section>
+    <section class="setup wrap" aria-labelledby="setup-title">
+      <div><h2 id="setup-title">Ready before<br>the next raid.</h2><p>No installer. No account.<br>Download, extract, open.</p></div>
+      <ol class="setup-steps"><li><h3>Extract the whole ZIP.</h3><p>Keep the included files and map folders together. The .NET runtime is already bundled.</p></li><li><h3>Open TLO.exe.</h3><p>TLO opens on its first run and lives in your system tray. Use Borderless or Windowed mode in Tarkov.</p></li><li><h3>Set your shortcuts.</h3><p>Open Settings from the title bar or tray. Assign your own shortcuts for the overlay, monitor toggle, tabs and scanner.</p></li></ol>
+    </section>
+    <aside class="requirements wrap"><p>Web tabs need <a href="https://developer.microsoft.com/microsoft-edge/webview2/">Microsoft WebView2 Runtime</a> and an internet connection. Maps and saved notes work offline.</p><p>TLO is an unsigned community application. <a href="https://github.com/William-Baaklini/Tarkov-Light-Overlay#readme">Read the full setup guide and limitations.</a></p></aside>
+  </main>
+  <footer class="wrap"><a class="brand footer-brand" href="./"><img src="assets/app.ico" width="28" height="28" alt=""><span>TLO</span></a><p>Independent community tool.<br>Not affiliated with Battlestate Games.</p><a href="https://github.com/William-Baaklini/Tarkov-Light-Overlay/blob/main/THIRD-PARTY-NOTICES.md">Credits &amp; third-party notices</a></footer>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Offline harness for the item scanner. It compiles the real scanner sources
+       and drives them through ScreenScan.ScanImage, so what is tested here is
+       exactly what ships - only the pixel source differs. -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <RootNamespace>TarkovOverlay</RootNamespace>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\src\TarkovOverlay\IconIndex.cs" Link="IconIndex.cs" />
+    <Compile Include="..\..\src\TarkovOverlay\ScreenScan.cs" Link="ScreenScan.cs" />
+  </ItemGroup>
+
+</Project>

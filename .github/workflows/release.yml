@@ -1,0 +1,47 @@
+name: Build Windows release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Package version (major.minor.patch)
+        default: '1.0.0'
+        required: true
+  push:
+    tags: ['v*']
+permissions:
+  contents: write
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Test window placement
+        run: dotnet run --project tests/WindowPlacementTest -c Release
+      - name: Generate map tiles
+        run: |
+          python -m pip install Pillow
+          python tools/tile_maps.py
+      - name: Package Windows download
+        shell: pwsh
+        env:
+          INPUT_VERSION: ${{ inputs.version }}
+        run: |
+          $version = if ($env:GITHUB_REF_TYPE -eq 'tag') { $env:GITHUB_REF_NAME.Substring(1) } else { $env:INPUT_VERSION }
+          ./tools/publish.ps1 -Version $version
+      - name: Verify portable package
+        run: python tools/verify_release.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: TLO-win-x64
+          path: release/*
+      - name: Create draft release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create $env:GITHUB_REF_NAME release/TLO-win-x64.zip release/TLO-win-x64.sha256 --draft --verify-tag --title "TLO $env:GITHUB_REF_NAME" --generate-notes

@@ -1,0 +1,14 @@
+**/bin/
+**/obj/
+artifacts/
+release/
+tiles/
+**/__pycache__/
+*.user
+*.suo
+.vs/
+.env
+.env.*
+!.env.example
+*.zip
+*.log

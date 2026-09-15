@@ -407,6 +407,11 @@ tests\ScanTest\        synthetic stash pages that measure the scanner
 data\icons.idx         the 2 MB index the scanner matches against
 ```
 
+## Support TLO
+
+If TLO helps you during your raids, you can [buy me a coffee on Ko-fi](https://ko-fi.com/wilodev)
+to support continued development. Support is optional; TLO remains free to use.
+
 ## Feedback and requests
 
 [Report a bug, suggest a feature, or leave a message](https://github.com/William-Baaklini/Tarkov-Light-Overlay/issues/new/choose)

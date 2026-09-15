@@ -1,0 +1,12 @@
+name: Ask a question or leave feedback
+description: Talk to the maintainer about TLO.
+body:
+  - type: markdown
+    attributes:
+      value: Your message and replies will be public on GitHub. Please do not include private contact details or other personal information.
+  - type: textarea
+    id: message
+    attributes:
+      label: Your question or feedback
+    validations:
+      required: true

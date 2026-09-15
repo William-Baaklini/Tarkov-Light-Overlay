@@ -407,6 +407,12 @@ tests\ScanTest\        synthetic stash pages that measure the scanner
 data\icons.idx         the 2 MB index the scanner matches against
 ```
 
+## Feedback and requests
+
+[Report a bug, suggest a feature, or leave a message](https://github.com/William-Baaklini/Tarkov-Light-Overlay/issues/new/choose)
+using the short GitHub forms. A GitHub account is required; messages and replies
+are public. Please check existing issues before opening a duplicate.
+
 ## Troubleshooting
 
 **The shortcut does nothing.** Another app already owns that combination —

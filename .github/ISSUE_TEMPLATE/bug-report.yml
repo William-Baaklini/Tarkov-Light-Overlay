@@ -1,0 +1,25 @@
+name: Report a bug
+description: Something in TLO is not working as expected.
+body:
+  - type: markdown
+    attributes:
+      value: This is a public conversation with the TLO maintainer. Please check existing issues first and keep personal information out of your report.
+  - type: textarea
+    id: problem
+    attributes:
+      label: What went wrong?
+      description: Tell us what happened and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: How can we reproduce it?
+      description: A few steps or a screenshot help. If it only happened once, say so.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Setup (optional)
+      placeholder: TLO version, Windows version, monitor resolution and scaling

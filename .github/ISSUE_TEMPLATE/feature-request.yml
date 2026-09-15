@@ -1,0 +1,18 @@
+name: Suggest a feature
+description: Share an idea that would make TLO more useful.
+body:
+  - type: markdown
+    attributes:
+      value: This is a public conversation with the TLO maintainer. Please check existing requests first; you can add your thoughts to an existing idea.
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like TLO to do?
+      description: Describe your idea and how it would help you use the tool.
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Anything else? (optional)
+      description: Examples, sketches or related requests are welcome.
